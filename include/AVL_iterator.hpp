@@ -113,8 +113,47 @@ auto AVL_tree_t<KeyT, ComparatorT>::cend()
 template <typename KeyT, typename ComparatorT>
 template <typename Ref>
 std::size_t AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
+get_cnt_keys_less_or_eq() const {
+  LOG_DEBUG_VARS(cur_node_ind_);
+  if (cur_node_ind_ == kNullNodeInd) { // this is end() iterator
+    return tree_.nodes_buffer_.size();
+  }
+
+  std::size_t cnt_keys_less_or_eq = 0;
+  node_ind_t node_ind = cur_node_ind_;
+  bool last_is_left_child = false;
+  while (node_ind != kNullNodeInd) {
+    node_ind_t left_son = tree_.get_node(node_ind).left;
+    if (!last_is_left_child) {
+      cnt_keys_less_or_eq += tree_.get_node_subtree_size(left_son);
+      ++cnt_keys_less_or_eq;
+    }
+    last_is_left_child = false;
+
+    node_ind_t parent = tree_.get_node(node_ind).parent;
+    if (parent != kNullNodeInd &&
+        tree_.get_node(parent).left == node_ind) {
+      last_is_left_child = true;
+    }
+    node_ind = parent;
+  }
+
+  return cnt_keys_less_or_eq;
+}
+
+template <typename KeyT, typename ComparatorT>
+template <typename Ref>
+std::size_t AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
     operator-(const AVL_tree_iterator& other) const {
-  assert(false && "Not implemented yet");
+  // assert(false && "Not implemented yet");
+
+  std::size_t less_than_start  = other.get_cnt_keys_less_or_eq();
+  std::size_t less_than_finish = get_cnt_keys_less_or_eq();
+  if (less_than_finish > less_than_finish) {
+    return 0;
+  }
+
+  return less_than_finish - less_than_start;
 }
 
 template <typename KeyT, typename ComparatorT>

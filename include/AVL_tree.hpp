@@ -51,6 +51,8 @@ class AVL_tree_t {
     // prefix --
     AVL_tree_iterator& operator--();
 
+    std::size_t get_cnt_keys_less_or_eq() const;
+
     std::size_t operator-(const AVL_tree_iterator& other) const;
 
     Ref operator*();
@@ -138,11 +140,13 @@ class AVL_tree_t {
 
   [[nodiscard]] node_ind_t balance_node(node_ind_t node_ind);
 
-  void recalc_node_height(node_ind_t node_ind);
+  void recalc_node_height_and_size(node_ind_t node_ind);
 
   [[nodiscard]] node_height_t get_node_balance(node_ind_t node_ind) const;
 
   [[nodiscard]] node_height_t get_node_height(node_ind_t node_ind) const;
+
+  [[nodiscard]] std::size_t get_node_subtree_size(node_ind_t node_ind) const;
 
   void set_node_right_son(node_ind_t parent_ind, node_ind_t kid_ind);
 
@@ -185,12 +189,13 @@ class AVL_tree_t {
     node_ind_t    left{};
     node_ind_t    right{};
     node_ind_t    parent{};
-    node_height_t height;
+    node_height_t height{};
+    std::size_t   subtree_size{};
 
     node_t() = default;
     node_t(const KeyT& key)
       : key(key), left(kNullNodeInd), right(kNullNodeInd),
-        parent(kNullNodeInd), height(1) {}
+        parent(kNullNodeInd), height(1), subtree_size(1) {}
   };
 
   ComparatorT         comparator_;
@@ -345,12 +350,15 @@ auto AVL_tree_t<KeyT, ComparatorT>::rotate_node_left(
 }
 
 template <typename KeyT, typename ComparatorT>
-void AVL_tree_t<KeyT, ComparatorT>::recalc_node_height(node_ind_t node_ind) {
+void AVL_tree_t<KeyT, ComparatorT>::recalc_node_height_and_size(node_ind_t node_ind) {
   node_t& cur_node = get_node(node_ind);
-  node_height_t  left_node_height = get_node_height(cur_node.left);
-  node_height_t right_node_height = get_node_height(cur_node.right);;
+  node_height_t  left_height     = get_node_height(cur_node.left);
+  node_height_t right_height     = get_node_height(cur_node.right);
+  std::size_t  left_subtree_size = get_node_subtree_size(cur_node.left);
+  std::size_t right_subtree_size = get_node_subtree_size(cur_node.right);
 
-  cur_node.height = std::max(left_node_height, right_node_height) + 1;
+  cur_node.height = std::max(left_height, right_height) + 1;
+  cur_node.subtree_size = left_subtree_size + 1 + right_subtree_size;
 }
 
 template <typename KeyT, typename ComparatorT>
@@ -371,6 +379,14 @@ AVL_tree_t<KeyT, ComparatorT>::get_node_height(node_ind_t node_ind) const {
 }
 
 template <typename KeyT, typename ComparatorT>
+[[nodiscard]] std::size_t AVL_tree_t<KeyT, ComparatorT>::
+get_node_subtree_size(node_ind_t node_ind) const {
+  return node_ind != kNullNodeInd
+            ? get_node(node_ind).subtree_size
+            : 0;
+}
+
+template <typename KeyT, typename ComparatorT>
 void AVL_tree_t<KeyT, ComparatorT>::set_node_right_son(
   node_ind_t parent_ind,
   node_ind_t kid_ind
@@ -382,7 +398,7 @@ void AVL_tree_t<KeyT, ComparatorT>::set_node_right_son(
     get_node(kid_ind).parent = parent_ind;
   }
 
-  recalc_node_height(parent_ind);
+  recalc_node_height_and_size(parent_ind);
 }
 
 // ASK: copypaste?
@@ -398,7 +414,7 @@ void AVL_tree_t<KeyT, ComparatorT>::set_node_left_son(
     get_node(kid_ind).parent = parent_ind;
   }
 
-  recalc_node_height(parent_ind);
+  recalc_node_height_and_size(parent_ind);
 }
 
 // ASK: ok? How not to write this every time: AVL_tree_t<KeyT, ComparatorT>?

@@ -7,24 +7,39 @@
 int main() {
   setLoggingLevel(DEBUG);
 
-  AVL_tree_t<int> tree;
+  // AVL_tree_t<int> tree;
   
-  // Insert in a way that would create an unbalanced BST
-  tree.insert(1);
-  tree.insert(2);
-  tree.insert(3);  // This should trigger rotation
-  // tree.visualize_tree("avl_tree_vizualized");
-  //exit(0);
+  // // Insert in a way that would create an unbalanced BST
+  // tree.insert(1);
+  // tree.insert(2);
+  // tree.insert(3);  // This should trigger rotation
+  // // tree.visualize_tree("avl_tree_vizualized");
+  // //exit(0);
 
-  std::vector<int> elements;
-  for (auto it = tree.begin(); it != tree.end(); ++it) {
-    elements.push_back(*it);
-    if (elements.size() > 8) exit(0);
-  }
+  // std::vector<int> elements;
+  // for (auto it = tree.begin(); it != tree.end(); ++it) {
+  //   elements.push_back(*it);
+  //   if (elements.size() > 8) exit(0);
+  // }
 
-  // AVL_tree_t<int> tree{5, 3, 7, 1, 4};
+
+  AVL_tree_t<int> tree{1, 2, 3, 4, 5};
+  auto begin = tree.begin();
+  auto end = tree.end();
+  
+  std::size_t distance = end - begin;
+  LOG_DEBUG_VARS(distance);
+
+
+
+  // AVL_tree_t<int> tree{1, 2, 3, 4, 5};
   // tree.visualize_tree("avl_tree_vizualized");
   // auto it = tree.begin();
+  // auto jt = tree.begin(); ++jt; ++jt;
+  // LOG_DEBUG_VARS(jt - it);
+
+
+
   // LOG_DEBUG_VARS(*it); ++it;
   // LOG_DEBUG_VARS(*it); ++it;
   // LOG_DEBUG_VARS(*it); ++it;
