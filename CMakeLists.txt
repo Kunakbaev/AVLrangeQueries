@@ -45,3 +45,4 @@ add_subdirectory(3dPartyModules/LoggerLib)
 # ====================================================
 
 add_subdirectory(source/usecase)
+add_subdirectory(tests/unit_tests)

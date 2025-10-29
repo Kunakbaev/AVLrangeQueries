@@ -5,8 +5,10 @@
 #include <functional>
 #include <initializer_list>
 #include <string>
+#include <string_view>
 #include <vector>
 
+#include "AVL_tree_fwd.hpp"
 #include "logLib.hpp"
 
 template <typename KeyT = std::int64_t,
@@ -22,6 +24,78 @@ class AVL_tree_t {
   using node_ind_t = std::size_t;
 
  public:
+  template <typename Ref>
+  class AVL_tree_iterator;
+  using       iterator = AVL_tree_iterator<KeyT&>;
+  using const_iterator = AVL_tree_iterator<const KeyT&>;
+
+  template <typename Ref>
+  class AVL_tree_iterator {
+    friend class AVL_tree_t;
+
+   private:
+    using TreeRef = std::conditional_t<
+        std::is_const_v<std::remove_reference_t<Ref>>,
+        const AVL_tree_t&,
+        AVL_tree_t&
+    >;
+
+   public:
+    // AVL_tree_iterator() = default;
+
+    explicit AVL_tree_iterator(TreeRef tree, node_ind_t node_ind);
+
+    // prefix ++, e.g. ++it
+    AVL_tree_iterator& operator++();
+
+    // prefix --
+    AVL_tree_iterator& operator--();
+
+    std::size_t operator-(const AVL_tree_iterator& other) const;
+
+    Ref operator*();
+
+    bool operator==(const AVL_tree_iterator& other) const;
+
+    bool operator!=(const AVL_tree_iterator& other) const;
+
+   private:
+    enum class iterator_move_dir_t {
+      kForward,
+      kBackward
+    };
+
+    node_ind_t get_target_subtree_for_navigate(
+      iterator_move_dir_t direction,
+      node_ind_t&         child_node_ind
+    );
+
+    AVL_tree_iterator<Ref>& navigate(iterator_move_dir_t direction);
+
+    template <typename GetKidFunc>
+    static node_ind_t get_extreme_node(
+      node_ind_t        start_node_ind,
+      GetKidFunc        get_kid_fund
+    );
+
+    static node_ind_t get_leftmost_node(TreeRef tree, node_ind_t start_node_ind);
+
+    static node_ind_t get_rightmost_node(TreeRef tree, node_ind_t start_node_ind);
+
+   private:
+    const std::string_view kIteratorBeforeBeginErrMsg =
+      "Error: operator()-- called on .begin() iterator...";
+    const std::string_view kIteratorAfterEndErrMsg =
+      "Error: operator()++ called on .end() iterator...";
+
+   private:
+    TreeRef tree_;
+    node_ind_t cur_node_ind_;
+    // const auto get_left_node_  = [tree_](node_ind_t node_ind){ return tree_.get_node(node_ind).left; };
+    // const auto get_right_node_ = [tree_](node_ind_t node_ind){ return tree_.get_node(node_ind).right; };
+  };
+
+ public:
   AVL_tree_t() = default;
 
   AVL_tree_t(const std::initializer_list<KeyT>& init_list);
@@ -29,6 +103,18 @@ class AVL_tree_t {
   void clear();
 
   void insert(const KeyT& new_key);
+
+  const_iterator begin() const;
+
+  iterator begin();
+
+  const_iterator end() const;
+
+  iterator end();
+
+  const_iterator cbegin() const;
+
+  const_iterator cend() const;
 
   // ================ visualization method ===========
 #ifdef DEBUG_
@@ -129,11 +215,12 @@ void AVL_tree_t<KeyT, ComparatorT>::insert(const KeyT& new_key) {
   LOG_DEBUG_VARS((size_t)new_key);
 #endif
   root_node_ind_ = add_new_key_recursively(root_node_ind_, new_key);
+  LOG_DEBUG_VARS(root_node_ind_);
 }
 
 template <typename KeyT, typename ComparatorT>
 void AVL_tree_t<KeyT, ComparatorT>::clear() {
-  nodes_buffer_.clear();
+  nodes_buffer_ = {{}};
   root_node_ind_ = kNullNodeInd;
 }
 
@@ -289,6 +376,8 @@ void AVL_tree_t<KeyT, ComparatorT>::set_node_right_son(
   node_ind_t kid_ind
 ) {
   get_node(parent_ind).right = kid_ind;
+  // WARNING: do it work?
+  get_node(parent_ind).parent = kNullNodeInd;
   if (kid_ind != kNullNodeInd) {
     get_node(kid_ind).parent = parent_ind;
   }
@@ -303,6 +392,8 @@ void AVL_tree_t<KeyT, ComparatorT>::set_node_left_son(
   node_ind_t kid_ind
 ) {
   get_node(parent_ind).left = kid_ind;
+  // WARNING: do it work?
+  get_node(parent_ind).parent = kNullNodeInd;
   if (kid_ind != kNullNodeInd) {
     get_node(kid_ind).parent = parent_ind;
   }
@@ -336,3 +427,5 @@ auto AVL_tree_t<KeyT, ComparatorT>::get_new_node(
 #ifdef DEBUG_
 #include "AVL_vizualization.hpp"
 #endif
+
+#include "AVL_iterator.hpp"
