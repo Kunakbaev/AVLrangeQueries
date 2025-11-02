@@ -1,11 +1,20 @@
 #include <iostream>
 #include <vector>
+#include <set>
 
-#include "AVL_tree.hpp"
+#include "AVL/AVL_tree.hpp"
 #include "logLib.hpp"
+#include "solutions/solutions_impl.hpp"
 
 int main() {
   setLoggingLevel(DEBUG);
+
+  // solution::solution_t<std::set<int>, int, solution::set_solution_tag> solution;
+  // solution.solve();
+
+  solution::solution_t<AVL_tree_t<int>, int, solution::avl_solution_tag> solution;
+  solution.solve();
+
 
   // AVL_tree_t<int> tree;
   
@@ -23,12 +32,12 @@ int main() {
   // }
 
 
-  AVL_tree_t<int> tree{1, 2, 3, 4, 5};
-  auto begin = tree.begin();
-  auto end = tree.end();
+  // AVL_tree_t<int> tree{1, 2, 3, 4, 5};
+  // auto begin = tree.begin();
+  // auto end = tree.end();
   
-  std::size_t distance = end - begin;
-  LOG_DEBUG_VARS(distance);
+  // std::size_t distance = end - begin;
+  // LOG_DEBUG_VARS(distance);
 
 
 
@@ -82,3 +91,15 @@ int main() {
 
   return 0;
 }
+
+/*
+
+input example from presentation:
+k 10 k 20 q 8 31 q 6 9 k 30 k 40 q 15 40
+
+correct output:
+2 0 3
+
+
+
+*/

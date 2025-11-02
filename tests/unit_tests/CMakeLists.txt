@@ -24,8 +24,9 @@ function(create_unit_test test_name source_file)
   add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
-create_unit_test(avl_tree_common    avl_tree_common_methods_tests.cpp)
-create_unit_test(avl_tree_iterators avl_tree_iterator_tests.cpp)
+create_unit_test(avl_tree_common            avl_tree_common_methods_tests.cpp)
+create_unit_test(avl_tree_iterators         avl_tree_iterator_tests.cpp)
+create_unit_test(avl_tree_lower_upper_bound avl_tree_lower_upper_bound_tests.cpp)
 
 add_custom_target(run_all_tests
   COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
