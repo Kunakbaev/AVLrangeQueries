@@ -67,11 +67,6 @@ class AVL_tree_t {
       kBackward
     };
 
-    node_ind_t get_target_subtree_for_navigate(
-      iterator_move_dir_t direction,
-      node_ind_t&         child_node_ind
-    );
-
     AVL_tree_iterator<Ref>& navigate(iterator_move_dir_t direction);
 
     template <typename GetKidFunc>
@@ -193,6 +188,8 @@ class AVL_tree_t {
 
  private:
   static const node_ind_t kNullNodeInd = 0;
+  static const node_ind_t kEndSentinel = static_cast<node_ind_t>(-1);
+  // static const node_ind_t kEndSentinel = -
 
  private:
   class node_t {
@@ -433,6 +430,7 @@ void AVL_tree_t<KeyT, ComparatorT>::set_node_left_son(
 template <typename KeyT, typename ComparatorT>
 auto AVL_tree_t<KeyT, ComparatorT>::get_node(node_ind_t node_ind) -> node_t& {
   assert(node_ind != kNullNodeInd);
+  assert(node_ind != kEndSentinel);
 
   return nodes_buffer_[node_ind];
 }

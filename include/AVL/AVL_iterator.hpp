@@ -41,6 +41,9 @@ auto AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::navigate(
     }
     cur_node_ind_ = parent;
   }
+  if (cur_node_ind_ == kNullNodeInd) {
+    cur_node_ind_ = kEndSentinel;
+  }
 
   return *this;
 }
@@ -88,14 +91,14 @@ auto AVL_tree_t<KeyT, ComparatorT>::begin() const -> const_iterator {
 template <typename KeyT, typename ComparatorT>
 auto AVL_tree_t<KeyT, ComparatorT>::end() -> iterator {
   return iterator{
-    *this, kNullNodeInd
+    *this, kEndSentinel
   };
 }
 
 template <typename KeyT, typename ComparatorT>
 auto AVL_tree_t<KeyT, ComparatorT>::end() const -> const_iterator {
   return const_iterator{
-    *this, kNullNodeInd
+    *this, kEndSentinel
   };
 }
 
@@ -115,7 +118,7 @@ template <typename Ref>
 std::size_t AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
 get_cnt_keys_less_or_eq() const {
   LOG_DEBUG_VARS(cur_node_ind_);
-  if (cur_node_ind_ == kNullNodeInd) { // this is end() iterator
+  if (cur_node_ind_ == kEndSentinel) { // this is end() iterator
     return tree_.nodes_buffer_.size();
   }
 
@@ -160,7 +163,6 @@ template <typename KeyT, typename ComparatorT>
 template <typename Ref>
 Ref AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
     operator*() {
-  // static bruh = tree_.get_node(cur_node_ind_);
   return tree_.get_node(cur_node_ind_).key;
 }
 
@@ -191,7 +193,7 @@ get_extreme_node(
   GetKidFunc        get_kid_func
 ) -> node_ind_t {
   if (start_node_ind == kNullNodeInd) {
-    return kNullNodeInd;
+    return kEndSentinel;
   }
 
   node_ind_t left_kid = kNullNodeInd;

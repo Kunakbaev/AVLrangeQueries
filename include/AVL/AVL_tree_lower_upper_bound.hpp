@@ -6,10 +6,10 @@ template <typename KeyT, typename ComparatorT>
 [[nodiscard]] auto AVL_tree_t<KeyT, ComparatorT>::
 general_find_node_after_key(KeyT key, bool skip_equal) const -> node_ind_t {
   if (!root_node_ind_) { // tree is empty
-    return kNullNodeInd;
+    return kEndSentinel;
   }
 
-  node_ind_t candidate_ind = kNullNodeInd;
+  node_ind_t candidate_ind = kEndSentinel;
   node_ind_t cur_node_ind = root_node_ind_;
   while (cur_node_ind != kNullNodeInd) {
     const node_t& cur_node = get_node(cur_node_ind);
