@@ -118,6 +118,14 @@ class AVL_tree_t {
 
   const_iterator cend() const;
 
+  iterator lower_bound(KeyT key);
+
+  iterator upper_bound(KeyT key);
+
+  const_iterator lower_bound(KeyT key) const;
+
+  const_iterator upper_bound(KeyT key) const;
+
   // ================ visualization method ===========
 #ifdef DEBUG_
   void visualize_tree(
@@ -155,6 +163,10 @@ class AVL_tree_t {
   [[nodiscard]] node_t& get_node(node_ind_t node_ind);
 
   [[nodiscard]] const node_t& get_node(node_ind_t node_ind) const;
+
+  [[nodiscard]] node_ind_t general_find_node_after_key(
+    KeyT key, bool skip_equal
+  ) const;
 
   // ================ visualization methods ===========
 #ifdef DEBUG_
@@ -445,3 +457,4 @@ auto AVL_tree_t<KeyT, ComparatorT>::get_new_node(
 #endif
 
 #include "AVL_iterator.hpp"
+#include "AVL_tree_lower_upper_bound.hpp"

@@ -4,3 +4,5 @@ build
 bin
 .out
 avl_tree_vizualized*
+test_input.in
+test_output.out

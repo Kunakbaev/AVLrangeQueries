@@ -1,5 +1,6 @@
-#include "gtest/gtest.h"
-#include "AVL_tree.hpp"
+#include <gtest/gtest.h>
+
+#include "AVL/AVL_tree.hpp"
 
 TEST(AVLTreeCommon, DefaultConstructor) {
   AVL_tree_t<int> tree;

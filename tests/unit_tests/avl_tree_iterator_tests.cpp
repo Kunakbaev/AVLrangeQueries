@@ -1,5 +1,6 @@
-#include "gtest/gtest.h"
-#include "AVL_tree.hpp"
+#include <gtest/gtest.h>
+
+#include "AVL/AVL_tree.hpp"
 
 TEST(AVLTreeIterator, BeginEndEmptyTree) {
   AVL_tree_t<int> tree;
@@ -129,7 +130,7 @@ TEST(AVLTreeIterator, IteratorDistancePartial) {
   auto it1 = tree.begin();
   auto it2 = tree.begin();
   ++it2; ++it2; // it2 points to 3
-  
+
   std::size_t distance = it2 - it1;
   EXPECT_EQ(distance, 2);
 }
