@@ -46,5 +46,28 @@ add_subdirectory(3dPartyModules/LoggerLib)
 
 # ====================================================
 
+file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/help_message.txt CONTENT "
+Available targets:
+  * usecase targets (dynamic range queries task solvers):
+    * avl_usecase
+    * set_usecase
+    Both targets expect input in the following format: 'k 10 k 20 q 8 31'.
+      + 'k' represents insert operation and one integer number is expected after it.
+      + 'q' denotes range query, expects 2 integers after symbol: low_key and high_key
+    Stdout: for each query of type 'q' (range query), number of keys, that are contained in the set at the moment of query, is printed
+  * unit tests (tests for different groups of methods of AVL tree):
+    * avl_tree_common - checks correctness of insert operations (however to get data from tree it also uses iterators)
+    * avl_tree_iterators - validates increment, decrement of iterators and distance between them
+    * avl_tree_lower_upper_bound - checks that methods 'lower_bound' and 'upper_bound' work correctly
+  * to run all tests perform following (from the project root dir):
+    cd build && ctest
+")
+
+add_custom_target(show_help_msg
+  COMMAND ${CMAKE_COMMAND} -E cat ${CMAKE_CURRENT_BINARY_DIR}/help_message.txt
+)
+
+# ====================================================
+
 add_subdirectory(tests/unit_tests)
 add_subdirectory(source/usecase)
