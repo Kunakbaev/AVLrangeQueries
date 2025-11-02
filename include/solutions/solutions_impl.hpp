@@ -43,6 +43,7 @@ class solution_t {
         default:
           std::cerr << kUnknownQueryType << "\n";
           success_read = false;
+          break;
       }
       if (!success_read) {
         break;
@@ -80,8 +81,10 @@ class solution_t {
 
     std::cin >> number;
     if (std::cin.fail()) {
+    #if 0
       std::cerr << kStdCinFail << "\n";
       std::cerr << "Input fail at query with index : " << query_index_ << "\n";
+    #endif
       return false;
     }
 

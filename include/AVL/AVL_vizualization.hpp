@@ -18,7 +18,12 @@ void AVL_tree_t<KeyT, ComparatorT>::visualize_tree(
   std::string png_gen_command =
     "dot -Gmargin=0 -Gpad=0.1 -Tpng "
     + dot_filename + " -o " + png_filename;
-  system(png_gen_command.c_str());
+  int status = system(png_gen_command.c_str());
+  if (status == -1) {
+    perror("system command failed, couldn't use dot utility...");
+  } else {
+    std::cerr << "System command failed, couldn't use dot utility, exited with code: " << status << std::endl;
+  }
 
   open_png_file(png_filename);
 }
@@ -72,13 +77,20 @@ void AVL_tree_t<KeyT, ComparatorT>::open_png_file(
   const std::string& png_filename
 ) const {
   // TODO: I hope this works fine, however I don't want to think about non linux systems for now
+  int status = 0;
   #ifdef _WIN32
-  system(("start " + png_filename).c_str());
+  status = system(("start " + png_filename).c_str());
   #elif __APPLE__
-  system(("open " + png_filename).c_str());
+  status = system(("open " + png_filename).c_str());
   #else
-  system(("xdg-open " + png_filename).c_str());
+  status = system(("xdg-open " + png_filename).c_str());
   #endif
+
+  if (status == -1) {
+    perror("system command failed, couldn't open image...");
+  } else {
+    std::cerr << "System command failed, couldn't open image, exited with code: " << status << std::endl;
+  }
 }
 
 template <typename KeyT, typename ComparatorT>
