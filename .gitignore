@@ -6,3 +6,6 @@ bin
 avl_tree_vizualized*
 test_input.in
 test_output.out
+tests_data
+__pycache__
+Testing

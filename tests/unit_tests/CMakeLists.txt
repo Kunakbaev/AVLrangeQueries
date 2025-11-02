@@ -1,8 +1,6 @@
 find_package(Threads REQUIRED)
 find_package(GTest REQUIRED)
 
-enable_testing()
-
 # Define a function to create test targets
 function(create_unit_test test_name source_file)
   add_executable(${test_name} ${source_file})

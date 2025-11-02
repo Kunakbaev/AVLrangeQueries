@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(AVL_range_queries)
 
+enable_testing()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -44,5 +46,5 @@ add_subdirectory(3dPartyModules/LoggerLib)
 
 # ====================================================
 
-add_subdirectory(source/usecase)
 add_subdirectory(tests/unit_tests)
+add_subdirectory(source/usecase)
