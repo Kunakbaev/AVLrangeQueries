@@ -152,7 +152,7 @@ std::size_t AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
 
   std::size_t less_than_start  = other.get_cnt_keys_less_or_eq();
   std::size_t less_than_finish = get_cnt_keys_less_or_eq();
-  if (less_than_finish > less_than_finish) {
+  if (less_than_finish < less_than_start) {
     return 0;
   }
 
@@ -171,7 +171,7 @@ template <typename Ref>
 bool AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
     operator==(const AVL_tree_iterator& other) const {
   return cur_node_ind_ == other.cur_node_ind_ &&
-         &tree_         == &other.tree_;
+         &tree_        == &other.tree_;
 }
 
 
