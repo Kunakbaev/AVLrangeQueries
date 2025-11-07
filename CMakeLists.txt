@@ -7,6 +7,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(AVL_range_queries)
 
+# Set default build type to Release if not specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build" FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
 # ===================================================
 
 add_library(my_project_includes INTERFACE)
@@ -34,6 +42,7 @@ set(COMMON_CXX_FLAGS ${WARNING_FLAGS})
 # ======================================================
 
 message("CXX_COMPILER: " ${CMAKE_CXX_COMPILER})
+message("CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_definitions(NO_LOG NDEBUG)
   set(COMPILATION_FLAGS ${COMMON_CXX_FLAGS} -O2 -DNDEBUG)

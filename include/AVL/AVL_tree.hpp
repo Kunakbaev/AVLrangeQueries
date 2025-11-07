@@ -229,7 +229,7 @@ void AVL_tree_t<KeyT, ComparatorT>::insert(const KeyT& new_key) {
   LOG_DEBUG_VARS((size_t)new_key);
 #endif
   root_node_ind_ = add_new_key_recursively(root_node_ind_, new_key);
-  LOG_DEBUG_VARS(root_node_ind_);
+  // LOG_DEBUG_VARS(root_node_ind_);
 }
 
 template <typename KeyT, typename ComparatorT>

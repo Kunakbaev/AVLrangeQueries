@@ -117,7 +117,7 @@ template <typename KeyT, typename ComparatorT>
 template <typename Ref>
 std::size_t AVL_tree_t<KeyT, ComparatorT>::AVL_tree_iterator<Ref>::
 get_cnt_keys_less_or_eq() const {
-  LOG_DEBUG_VARS(cur_node_ind_);
+  // LOG_DEBUG_VARS(cur_node_ind_);
   if (cur_node_ind_ == kEndSentinel) { // this is end() iterator
     return tree_.nodes_buffer_.size();
   }
