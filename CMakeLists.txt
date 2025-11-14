@@ -90,6 +90,40 @@ Available targets:
     * avl_tree_lower_upper_bound - checks that methods 'lower_bound' and 'upper_bound' work correctly
   * to run all tests perform following (from the project root dir):
     cd build && ctest
+
+==========================================================
+How to use python scripts for testing/perf_measurement
+Tests folder structure:
+$ tree tests
+tests
+├── stress_tests
+│   ├── common.py
+│   ├── compare_perf.py
+│   ├── end2end.py
+│   └── __pycache__
+│       └── common.cpython-310.pyc
+├── tests_data
+│   ├── large
+│   ├── medium
+│   ├── small
+│   └── tiny
+├── tests_generators
+│   └── generator.py
+└── unit_tests
+    ├── avl_tree_common_methods_tests.cpp
+    ├── avl_tree_iterator_tests.cpp
+    ├── avl_tree_lower_upper_bound_tests.cpp
+    └── CMakeLists.txt
+
+First run following line. It will create folder tests_data.
+$ python3 tests/tests_generators/generator.py
+
+To see stats on performance difference between set and avl solutions on different groups of tests:
+$ python3 tests/stress_tests/compare_perf.py
+
+To check, whether answers of 2 different solutions (avl and set) match (we consider set solution as an etalon, that produces correct answers):
+$ python3 tests/stress_tests/compare_perf.py
+
 ")
 
 add_custom_target(show_help_msg
