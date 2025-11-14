@@ -4,6 +4,7 @@
 #include <string_view>
 
 #include "AVL/AVL_tree.hpp"
+#include "AVL/utilities.hpp"
 
 namespace solution {
 
@@ -113,7 +114,13 @@ class solution_t {
     const_iterator start = container_.lower_bound(low_key);
     const_iterator fin   = container_.upper_bound(high_key);
     std::size_t dist = get_my_distance(start, fin);
+
+#ifndef TIME_MEASUREMENT_
     std::cout << dist << " ";
+#else
+    // I don't want compiler to optimize away computation of get_my_distance() method
+    do_not_optimize(dist);
+#endif
 
     return true;
   }

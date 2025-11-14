@@ -80,6 +80,10 @@ Available targets:
       + 'k' represents insert operation and one integer number is expected after it.
       + 'q' denotes range query, expects 2 integers after symbol: low_key and high_key
     Stdout: for each query of type 'q' (range query), number of keys, that are contained in the set at the moment of query, is printed
+  * performance measure targets:
+    * avl_perf_measurement
+    * set_perf_measurement
+    Work the same way as usecase targets (they solve the same task), but instead of providing answers to queries, they print single number - how long it took to process all queries in milliseconds (ms).
   * unit tests (tests for different groups of methods of AVL tree):
     * avl_tree_common - checks correctness of insert operations (however to get data from tree it also uses iterators)
     * avl_tree_iterators - validates increment, decrement of iterators and distance between them
@@ -96,3 +100,4 @@ add_custom_target(show_help_msg
 
 add_subdirectory(tests/unit_tests)
 add_subdirectory(source/usecase)
+add_subdirectory(source/perf_measurement)
